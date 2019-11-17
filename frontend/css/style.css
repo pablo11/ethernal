@@ -730,7 +730,7 @@ h6 {
 }
 
 #why-us .card {
-  background: #ff9bfa;
+  background: #ba5ba0;
   border-color: #fb54bb;
   border-radius: 10px;
   margin: 0 15px;
@@ -742,7 +742,7 @@ h6 {
 }
 
 #why-us .card:hover {
-  background: #e82a54;
+  background: #f09bba;
   border-color: #f03874;
 }
 
