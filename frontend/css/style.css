@@ -724,6 +724,11 @@ h6 {
   color: #007bff;
 }
 
+#metamaskLogo{
+  width:25%;
+  padding-bottom: 25px;
+}
+
 #services .description {
   font-size: 14px;
   margin-left: 40px;
