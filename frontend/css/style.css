@@ -93,6 +93,19 @@ h6 {
     font-size: 0.85rem;
 }
 
+#searchBar {
+    height: 50px;
+    font-size: 1.5rem;
+    color: black;
+    border: 0px;
+    border-radius: 25px;
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    box-shadow: 0 0 15px rgba(230, 230, 230, 0.7);
+}
+
 /* Back to top button */
 
 .back-to-top {
@@ -128,12 +141,6 @@ h6 {
   z-index: 9999;
   overflow: hidden;
   background: #fff;
-}
-
-#searchBar{
-  border-radius: 25px;
-  margin-bottom: 5%;
-  border: 1px solid #ce93d8;
 }
 
 #preloader:before {
