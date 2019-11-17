@@ -18,43 +18,90 @@ $(document).ready(async function() {
     getAndDisplayHistory(contract)
     setInterval(() => {
         getAndDisplayHistory(contract)
-    }, 3000)
+    }, 2000)
 
 
-    getAndDisplayMsg(contract, "1")
+    //getAndDisplayMsg(contract, "1")
 
-
-    web3MethodsButton.addEventListener('click', async function() {
-        const input = document.getElementById("msg")
-        const text = input.value
-        if (text == undefined || text == null || text == "") {
-            displayAlert("You need to provide a non-empty")
-            return
-        }
-        input.value = ""
-
-        await connectMetamask(web3)
-
-        contract.postMessage(text, function(err, txHash) {
-            console.log(err, txHash)
-            if (err) {
-                const msg = "There was an error while publishing your message".
-                displayAlert(msg)
-            } else {
-
-                const txUrl = "https://ropsten.etherscan.io/tx/" + txHash;
-                window.open(txUrl, '_blank');
-
-                waitTx(web3, txHash, (success) => {
-                    console.log("transaction was added?", success);
-                })
+    $("#msg").on('keyup', async (e) => {
+        if (e.keyCode === 13) {
+            const input = document.getElementById("msg")
+            const text = input.value
+            if (text == undefined || text == null || text == "") {
+                displayAlert("You need to provide a non-empty")
+                return
             }
-        })
-    })
+
+            await connectMetamask(web3)
+
+            const typeSelector = document.getElementById("dropdownMenuButton")
+            const type = typeSelector.innerHTML
+            var msg = text
+            if (type.toLowerCase() != "personalized") {
+                msg = type + " " + msg
+            }
+
+            input.value = ""
+
+            contract.postMessage(text, function(err, txHash) {
+                console.log(err, txHash)
+                if (err) {
+                    const msg = "There was an error while publishing your message".
+                    displayAlert(msg)
+                } else {
+
+                    displayWaitingTx(txHash)
+
+                    // const txUrl = "https://ropsten.etherscan.io/tx/" + txHash;
+                    // window.open(txUrl, '_blank');
+
+                    waitTx(web3, txHash, (success) => {
+                        document.getElementById("alert-" + txHash).remove()
+                        if (!success) {
+                            displayAlert("There was a problem adding your message to the blockchain 😩")
+                        }
+                    })
+                }
+            })
+
+        }
+    });
 })
 
 function displayWaitingTx(txHash) {
+    const txUrl = "https://ropsten.etherscan.io/tx/" + txHash;
+    var alertBox = `
+    <div class="alert alert-success" style="position:fixed; bottom:20px; right:20px;" id="alert-` + txHash + `">
+        <style>
+        .addingToBlockchainMsg {
+            float: left;
+        }
 
+        .loader {
+            float: left;
+            border: 4px solid #155724;
+            border-top: 4px solid #d4edda;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 2s linear infinite;
+            margin-right: 1.25rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        </style>
+        <div class="loader"></div>
+        <div class="addingToBlockchainMsg">
+            Your messgage is beeing added to the blockchain.<br>
+            <a href="` + txUrl + `" target="_blank">See transaction on etherscan.io</a>
+        </div>
+    </div>
+    `
+
+    $('body').append(alertBox)
 
 }
 
@@ -115,7 +162,7 @@ function displayResults(msgs) {
                 <div class="col-md-12 col-lg-10 offset-lg-1 wow bounceInUp" data-wow-duration="` + duration + `s">
                     <div class="box">
                         <div class="icon"><i class="ion-ios-analytics-outline" style="color: #ff689b;"></i></div>
-                        <h4 class="title"><a href="">` + msg.text + `</a></h4>
+                        <h4 class="title"><a href="https://ethernal.5w155.ch/msg.html?id=` + msg.id + `">` + msg.text + `</a></h4>
                         <p class="description">` + formatTimestamp(msg.ts) + `</p>
                     </div>
                 </div>
@@ -131,7 +178,14 @@ function displayResults(msgs) {
 }
 
 function displayAlert(msg) {
-    window.alert(msg)
+    var alertBox = `
+    <div class="alert alert-danger alert-dismissible" style="position:fixed; bottom:20px; right:20px;">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Error!</strong><br>` + msg + `<br>
+    </div>
+    `
+
+    $('body').append(alertBox)
 }
 
 function getWeb3() {
@@ -145,7 +199,7 @@ function getWeb3() {
         return window.web3
     } else {
         // Non-dapp browsers...
-        const msg = "ETHernal requires Metamask in order to work, and this is only available on Chrome..."
+        const msg = "ETHernal requires Metamask in order to work,<br> and this is only available on Chrome..."
         displayAlert(msg)
     }
 

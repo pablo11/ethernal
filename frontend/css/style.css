@@ -45,6 +45,11 @@ h6 {
   padding: 0;
 }
 
+.alert {
+    padding: 1.25rem 1.25rem;
+    border-radius: 10px;
+}
+
 /* Back to top button */
 
 .back-to-top {
