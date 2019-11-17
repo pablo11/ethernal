@@ -231,6 +231,18 @@ h6 {
 # Intro Section
 --------------------------------------------------------------*/
 
+#ethrLogo{
+  width: 9%;
+}
+
+#ethrLabel{
+  width: 50%;
+}
+
+#logoCont{
+  padding-bottom: 100px;
+}
+
 #intro {
   width: 100%;
   position: relative;
