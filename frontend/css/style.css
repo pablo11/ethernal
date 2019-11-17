@@ -233,11 +233,11 @@ h6 {
 --------------------------------------------------------------*/
 
 #ethrLogo{
-  width: 5%;
+  width: 50px;
 }
 
 #ethrLabel{
-  width: 30%;
+  width: 330px;
 }
 
 #logoCont{
@@ -265,6 +265,15 @@ h6 {
 }
 
 @media (max-width: 990px) {
+
+    #ethrLogo{
+      width: 40px;
+    }
+
+    #ethrLabel{
+      width: 220px;
+    }
+
     #intro .intro-img img {
         top: 0px;
     }
