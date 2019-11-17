@@ -41,9 +41,11 @@ $(document).ready(async function() {
                 msg = type + " " + text
             }
 
+            console.log(msg);
+
             input.value = ""
 
-            contract.postMessage(text, function(err, txHash) {
+            contract.postMessage(msg, function(err, txHash) {
                 console.log(err, txHash)
                 if (err) {
                     const msg = "There was an error while publishing your message".
