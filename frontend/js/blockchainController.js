@@ -1,6 +1,8 @@
 const SMART_CONTRACT_ADDR = "0x5205d148d750f1759c3a1ee689fe9989c78761a3"
 const ABI_URL = "/abi.json"
 
+var currentMsgs = []
+
 $(document).ready(async function() {
 
     // Connect to the nodes
@@ -95,7 +97,7 @@ function formatTimestamp(ts) {
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     const d = new Date(ts * 1000);
 
-    return d.getHours() + ":" + d.getMinutes() + " - " + monthNames[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear()
+    return monthNames[d.getMonth()] + " " + d.getDate() + " " + d.getFullYear() + ", " + d.getHours() + ":" + d.getMinutes()
 }
 
 function displayResults(msgs) {
@@ -103,14 +105,29 @@ function displayResults(msgs) {
         return
     }
 
-    //console.log(msgs);
+    if (msgs.length != currentMsgs.length) {
+        currentMsgs = msgs
 
-    const resultsContiner = document.getElementById("results")
-    const content = msgs.reduce((acc, msg) => {
-        return acc + msg.text + " ----- <i>" + formatTimestamp(msg.ts) + "</i><br>"
-    }, "")
+        const resultsContiner = document.getElementById("posts")
+        const content = msgs.reduce((acc, msg, i) => {
+            var duration = 1 + 0.1 * i
+            var newPost = `
+                <div class="col-md-12 col-lg-10 offset-lg-1 wow bounceInUp" data-wow-duration="` + duration + `s">
+                    <div class="box">
+                        <div class="icon"><i class="ion-ios-analytics-outline" style="color: #ff689b;"></i></div>
+                        <h4 class="title"><a href="">` + msg.text + `</a></h4>
+                        <p class="description">` + formatTimestamp(msg.ts) + `</p>
+                    </div>
+                </div>
+            `
 
-    resultsContiner.innerHTML = content
+            return acc + newPost
+        }, "")
+
+        resultsContiner.innerHTML = content
+
+    }
+
 }
 
 function displayAlert(msg) {
