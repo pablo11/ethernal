@@ -232,11 +232,11 @@ h6 {
 --------------------------------------------------------------*/
 
 #ethrLogo{
-  width: 9%;
+  width: 6%;
 }
 
 #ethrLabel{
-  width: 50%;
+  width: 38%;
 }
 
 #logoCont{
@@ -249,7 +249,7 @@ h6 {
   /*background: url("../img/intro-bg.png") center bottom no-repeat;*/
   background: linear-gradient(0deg,#ff3a00 0,#ff0979 100%);
   background-size: cover;
-  padding: 40px 0 120px 0;
+  padding: 100px 0 120px 0;
 }
 
 #intro .intro-img {
