@@ -32,13 +32,13 @@ $(document).ready(async function() {
                 return
             }
 
-            await connectMetamask(web3)
+            _ = await connectMetamask(web3)
 
             const typeSelector = document.getElementById("dropdownMenuButton")
             const type = typeSelector.innerHTML
             var msg = text
-            if (type.toLowerCase() != "personalized") {
-                msg = type + " " + msg
+            if (type.toUpperCase() != "PERSONALIZED") {
+                msg = type + " " + text
             }
 
             input.value = ""
@@ -59,6 +59,8 @@ $(document).ready(async function() {
                         document.getElementById("alert-" + txHash).remove()
                         if (!success) {
                             displayAlert("There was a problem adding your message to the blockchain 😩")
+                        } else {
+                            scrollToPosts()
                         }
                     })
                 }
@@ -67,6 +69,12 @@ $(document).ready(async function() {
         }
     });
 })
+
+function scrollToPosts() {
+    $('html, body').animate({
+        scrollTop: $('#services').offset().top
+    }, 1000);
+}
 
 function displayWaitingTx(txHash) {
     const txUrl = "https://ropsten.etherscan.io/tx/" + txHash;
@@ -218,8 +226,6 @@ async function connectMetamask(web3) {
         const msg = "You need to authorize ethernal to connect to your Metamask!"
         displayAlert(msg)
     }
-
-    return null
 }
 
 async function setupContract(web3, addr) {
