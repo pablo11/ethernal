@@ -4,6 +4,7 @@ contract Ethernal {
     struct Message {
         int id;
         string text;
+        string timestamp;
     }
 
     Message[] messages;
@@ -15,9 +16,11 @@ contract Ethernal {
         if (bytes(text).length < 1 || bytes(text).length > lengthMax) return -1;
 
         int newId = int(messages.length);
+        string memory newTimestamp = uint2str(now);
         Message memory newMessage = Message({
             id: newId,
-            text: text
+            text: text,
+            timestamp: newTimestamp
         });
         messages.push(newMessage);
         return newId;
@@ -27,7 +30,8 @@ contract Ethernal {
         // Check id is within range
         //if (id < 0 || id >= messages.length) return "";
 
-        return messages[id].text;
+        string memory parseMessage = string(abi.encodePacked(uint2str(id), " ", messages[id].timestamp, " ", messages[id].text));
+        return parseMessage;
     }
 
     /// Return the whole array under a long string
@@ -36,7 +40,7 @@ contract Ethernal {
         string memory stringBuilder = "";
 
         for (uint i = 0; i < messages.length; i++) {
-            stringBuilder = string(abi.encodePacked(stringBuilder, uint2str(i), " ", messages[i].text, "\n"));
+            stringBuilder = string(abi.encodePacked(stringBuilder, uint2str(i), " ", messages[i].timestamp, " ", messages[i].text, "\n"));
         }
 
         return stringBuilder;
@@ -60,7 +64,7 @@ contract Ethernal {
         }
         return string(bstr);
     }
-
+    
 
 
     ///
