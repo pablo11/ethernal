@@ -255,6 +255,12 @@ h6 {
 #intro .intro-img {
   width: 50%;
   float: right;
+  height: 555px;
+}
+
+#intro .intro-img img {
+    top: -100px;
+    position: relative;
 }
 
 #intro .intro-info {
