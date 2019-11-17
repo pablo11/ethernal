@@ -50,6 +50,49 @@ h6 {
     border-radius: 10px;
 }
 
+.dropdown-menu {
+    width: 200px;
+    font-size: 1.5rem;
+    border: 0px;
+    border-radius: 25px;
+}
+
+.dropdown-item:hover {
+    border-radius: 25px;
+    background-color: #ddd;
+}
+
+#dropdownMenuButton {
+    height: 50px;
+    width: 200px;
+    background-color: white;
+    color: black;
+    font-size: 1.5rem;
+    border: 0px;
+    border-radius: 25px;
+}
+
+#dropdownMenuButton:hover {
+    background-color: #ddd;
+}
+
+#msg {
+    height: 50px;
+    font-size: 1.5rem;
+    color: black;
+    border: 0px;
+    border-radius: 25px;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+#instructionToPost {
+    text-align: right;
+    color: white;
+    margin-top: 10px;
+    font-size: 0.85rem;
+}
+
 /* Back to top button */
 
 .back-to-top {

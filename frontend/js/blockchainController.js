@@ -199,7 +199,7 @@ function getWeb3() {
         return window.web3
     } else {
         // Non-dapp browsers...
-        const msg = "ETHernal requires Metamask in order to work,<br> and this is only available on Chrome..."
+        const msg = "ethernal requires Metamask in order to work,<br> and this is only available on Chrome..."
         displayAlert(msg)
     }
 
@@ -215,7 +215,7 @@ async function connectMetamask(web3) {
         // User denied account access...
         console.log(error.message);
 
-        const msg = "You need to authorize ETHernal to connect to your Metamask!"
+        const msg = "You need to authorize ethernal to connect to your Metamask!"
         displayAlert(msg)
     }
 
