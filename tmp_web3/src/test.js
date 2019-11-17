@@ -1,16 +1,9 @@
-// $(window).ready(async function() {
-//
-//     var isMetamastInstalled = isInstalled()
-//
-//     console.log(isMetamastInstalled ? "yes" : "no");
-//
-//     await isInstalled2()
-// })
-
-const SMART_CONTRACT_ADDR = "0x692a70D2e424a56D2C6C27aA97D1a86395877b3A"
+const SMART_CONTRACT_ADDR = "0x5205d148d750f1759c3a1ee689fe9989c78761a3"
 const ABI_URL = "/abi.json"
 
 $(document).ready(async function() {
+
+    // Connect to the nodes
     const web3 = getWeb3()
     if (web3 == null) {
         console.log("ERROR: couldn't connect to ");
@@ -19,30 +12,97 @@ $(document).ready(async function() {
 
     const contract = await setupContract(web3, SMART_CONTRACT_ADDR)
 
+    // Load history
+    getAndDisplayHistory(contract)
+    setInterval(() => {
+        getAndDisplayHistory(contract)
+    }, 3000)
+
+
+    getAndDisplayMsg(contract, "1")
+
+
     web3MethodsButton.addEventListener('click', async function() {
+        const input = document.getElementById("msg")
+        const text = input.value
+        if (text == undefined || text == null || text == "") {
+            displayAlert("You need to provide a non-empty")
+            return
+        }
+        input.value = ""
 
-        // Call method
-        contract.getHistory(function(err, data) {
-            console.log(err, data)
+        await connectMetamask(web3)
+
+        contract.postMessage(text, function(err, txHash) {
+            console.log(err, txHash)
+            if (err) {
+                const msg = "There was an error while publishing your message".
+                displayAlert(msg)
+            } else {
+
+                const txUrl = "https://ropsten.etherscan.io/tx/" + txHash;
+                window.open(txUrl, '_blank');
+            }
         })
-
-
-        // Send transactions
-        // contract.postMessage("Hello", function(err, txHash) {
-        //     console.log(err, txHash)
-        //     if (err) {
-        //         const msg = "There was an error while publishing your message".
-        //         displayAlert(msg)
-        //     } else {
-        //         const txUrl = "https://ropsten.etherscan.io/tx/" + txHash;
-        //         window.open(txUrl, '_blank');
-        //     }
-        // })
-
     })
-
-
 })
+
+function getAndDisplayHistory(contract) {
+    contract.getHistory(function(err, data) {
+        if (err) {
+            displayResults(null)
+        } else {
+            var msgs = data.split("\n").filter((msg) => { return msg != "" }).map(parseMsg)
+            msgs = msgs.sort((a, b) => parseInt(b.ts) - parseInt(a.ts))
+            displayResults(msgs)
+        }
+    })
+}
+
+function getAndDisplayMsg(contract, id) {
+    contract.getMessageById(id, function(err, data) {
+        if (err) {
+            console.log(err)
+        } else {
+            var msg = parseMsg(data)
+            console.log(msg)
+        }
+    })
+}
+
+function parseMsg(rawMsg) {
+    var splitted = rawMsg.split(" ")
+
+    var text = splitted.slice(2, splitted.length).join(" ")
+
+    return {
+        id: splitted[0],
+        ts: splitted[1],
+        text: text
+    }
+}
+
+function formatTimestamp(ts) {
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    const d = new Date(ts * 1000);
+
+    return d.getHours() + ":" + d.getMinutes() + " - " + monthNames[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear()
+}
+
+function displayResults(msgs) {
+    if (msgs == null) {
+        return
+    }
+
+    //console.log(msgs);
+
+    const resultsContiner = document.getElementById("results")
+    const content = msgs.reduce((acc, msg) => {
+        return acc + msg.text + " ----- <i>" + formatTimestamp(msg.ts) + "</i><br>"
+    }, "")
+
+    resultsContiner.innerHTML = content
+}
 
 function displayAlert(msg) {
     window.alert(msg)
@@ -71,7 +131,6 @@ async function connectMetamask(web3) {
         // Request account access if needed
         const accounts = await ethereum.enable()
         console.log("Accounts:", accounts);
-        return window.web3
     } catch (error) {
         // User denied account access...
         console.log(error.message);
