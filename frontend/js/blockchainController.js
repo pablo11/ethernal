@@ -1,9 +1,13 @@
 const SMART_CONTRACT_ADDR = "0x5205d148d750f1759c3a1ee689fe9989c78761a3"
 const ABI_URL = "/abi.json"
 
+var historyMsgs = []
 var currentMsgs = []
+var isSearching = false
 
 $(document).ready(async function() {
+
+    setupSearchBox()
 
     // Connect to the nodes
     const web3 = getWeb3()
@@ -72,6 +76,26 @@ $(document).ready(async function() {
     });
 })
 
+function setupSearchBox() {
+    $("#searchBar").on('keyup', async (e) => {
+        const input = document.getElementById("searchBar")
+        const searchValue = input.value
+
+        isSearching = searchValue != ""
+
+        if (searchValue == "") {
+            displayResults(historyMsgs)
+            return
+        }
+
+        filteredMsgs = historyMsgs.filter((msg) => {
+            return msg.text.includes(searchValue)
+        })
+
+        displayResults(filteredMsgs)
+    })
+}
+
 function scrollToPosts() {
     $('html, body').animate({
         scrollTop: $('#services').offset().top
@@ -116,12 +140,17 @@ function displayWaitingTx(txHash) {
 }
 
 function getAndDisplayHistory(contract) {
+    if (isSearching) {
+        return
+    }
+
     contract.getHistory(function(err, data) {
         if (err) {
             displayResults(null)
         } else {
             var msgs = data.split("\n").filter((msg) => { return msg != "" }).map(parseMsg)
             msgs = msgs.sort((a, b) => parseInt(b.ts) - parseInt(a.ts))
+            historyMsgs = msgs
             displayResults(msgs)
         }
     })
