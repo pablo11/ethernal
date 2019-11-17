@@ -70,6 +70,7 @@ h6 {
     font-size: 1.5rem;
     border: 0px;
     border-radius: 25px;
+    margin-bottom: 10px;
 }
 
 #dropdownMenuButton:hover {
@@ -261,6 +262,17 @@ h6 {
 #intro .intro-img img {
     top: -100px;
     position: relative;
+}
+
+@media (max-width: 990px) {
+    #intro .intro-img img {
+        top: 0px;
+    }
+
+    #intro .intro-img {
+      height: auto;
+    }
+
 }
 
 #intro .intro-info {
