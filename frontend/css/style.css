@@ -87,6 +87,12 @@ h6 {
   background: #fff;
 }
 
+#searchBar{
+  border-radius: 25px;
+  margin-bottom: 5%;
+  border: 1px solid #ce93d8;
+}
+
 #preloader:before {
   content: "";
   position: fixed;
