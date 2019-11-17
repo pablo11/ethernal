@@ -738,6 +738,16 @@ h6 {
   padding-bottom: 25px;
 }
 
+#msgLogo{
+  width:25%;
+  padding-bottom: 25px;
+}
+
+#ethrSmallLogo{
+  width:25%;
+  padding-bottom: 25px;
+}
+
 #services .description {
   font-size: 14px;
   margin-left: 40px;
