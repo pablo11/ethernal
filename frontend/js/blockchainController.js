@@ -1,4 +1,4 @@
-const SMART_CONTRACT_ADDR = "0x5205d148d750f1759c3a1ee689fe9989c78761a3"
+const SMART_CONTRACT_ADDR = "0x11bE18D814DB641eace2B2d0d4D2d223302F09cd"
 const ABI_URL = "/abi.json"
 
 var historyMsgs = []
